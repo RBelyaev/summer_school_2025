@@ -20,11 +20,11 @@ jobs:
       - name: Convert notebook to script
         run: |
           mkdir -p tests/notebook_tests
-          echo "Converting notebook..."
           jupyter nbconvert --to python notebooks/summer_school_notebook.ipynb \
-            --output-dir tests/notebook_tests/
-          ls -la tests/notebook_tests/
-          cat tests/notebook_tests/summer_school_notebook.py
+            --output-dir tests/notebook_tests/ \
+            --output summer_school_notebook
+          sed -i '/get_ipython/d' tests/notebook_tests/summer_school_notebook.py
+          echo -e "import subprocess\n$(cat tests/notebook_tests/summer_school_notebook.py)" > tests/notebook_tests/summer_school_notebook.py
       - name: Lint with flake8
         run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
