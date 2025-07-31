@@ -1,7 +1,11 @@
 import torch
 from ignite.contrib.handlers import TensorboardLogger
 from ignite.engine import Engine
-from notebook_tests import summer_school_notebook as notebook
+from notebook_tests.summer_school_notebook import (
+    IgniteTrainer,
+    MLPDynamicModel,
+    MLPDynamicWithRegularizationModel,
+)
 from torch import nn
 
 
@@ -11,24 +15,22 @@ class TestNotebook:
     def test_mlp_model_classes(self):
         """Checking model classes"""
         # Checking the MLPDynamicModel
-        assert hasattr(notebook, "MLPDynamicModel")
-        model1 = notebook.MLPDynamicModel([10, 20, 1])
+        model1 = MLPDynamicModel([10, 20, 1])
         assert isinstance(model1, nn.Module)
 
         # Checking the MLPDynamicWithRegularizationModel
-        assert hasattr(notebook, "MLPDynamicWithRegularizationModel")
-        model2 = notebook.MLPDynamicWithRegularizationModel([10, 20, 30, 1])
+        model2 = MLPDynamicWithRegularizationModel([10, 20, 30, 1])
         assert isinstance(model2, nn.Module)
 
     def test_model_forward_pass(self):
         """Checking forward pass models"""
         # Checking the MLPDynamicModel
-        model1 = notebook.MLPDynamicModel([5, 10, 1])
+        model1 = MLPDynamicModel([5, 10, 1])
         output1 = model1(torch.randn(32, 5))
         assert output1.shape == (32, 1)
 
         # Checking the MLPDynamicWithRegularizationModel
-        model2 = notebook.MLPDynamicWithRegularizationModel([5, 10, 1])
+        model2 = MLPDynamicWithRegularizationModel([5, 10, 1])
         output2 = model2(torch.randn(32, 5))
         assert output2.shape == (32, 1)
 
@@ -40,7 +42,7 @@ class TestNotebook:
         criterion = nn.MSELoss()
 
         # Initialize trainer
-        trainer = notebook.IgniteTrainer(
+        trainer = IgniteTrainer(
             model_name="test_model",
             model=model,
             optimizer=optimizer,
@@ -66,7 +68,7 @@ class TestNotebook:
         criterion = nn.MSELoss()
 
         # Initialize trainer
-        trainer = notebook.IgniteTrainer(
+        trainer = IgniteTrainer(
             model_name="test_model",
             model=model,
             optimizer=optimizer,
