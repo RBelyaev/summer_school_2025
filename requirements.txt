@@ -10,3 +10,4 @@ nbconvert>=6.0.0
 ipykernel>=6.0.0
 flake8>=6.1.0
 pytorch-ignite>=0.4.11
+tensorboard>=2.0.0
