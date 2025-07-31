@@ -1,7 +1,7 @@
 import torch
 from ignite.contrib.handlers import TensorboardLogger
 from ignite.engine import Engine
-from notebook_tests.summer_school_notebook import (
+from src.for_test import (
     IgniteTrainer,
     MLPDynamicModel,
     MLPDynamicWithRegularizationModel,
