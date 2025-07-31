@@ -8,3 +8,4 @@ jupyter>=1.0.0
 pytest>=7.0.0
 nbconvert>=6.0.0
 flake8>=6.1.0
+pytorch-ignite>=0.4.11
