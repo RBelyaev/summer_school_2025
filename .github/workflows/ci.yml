@@ -1,0 +1,38 @@
+name: Python CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install jupyter nbconvert
+      - name: Convert notebook to script
+        run: |
+          mkdir -p tests/notebook_tests
+          jupyter nbconvert --to python notebooks/summer_school_notebook.ipynb \
+            --output-dir tests/notebook_tests/ \
+            --output summer_school_notebook
+          sed -i '/get_ipython/d' tests/notebook_tests/summer_school_notebook.py
+          echo -e "import subprocess\n$(cat tests/notebook_tests/summer_school_notebook.py)" > tests/notebook_tests/summer_school_notebook.py
+      - name: Lint with flake8
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Run pre-commit
+        run: |
+          pip install pre-commit
+          pre-commit run --all-files
+      - name: Test with pytest
+        run: |
+          python -m pytest tests/
